@@ -65,7 +65,6 @@ setRecentContracts(response.data.recentContracts || []);
 setUsers(response.data.users || []);
 } catch (err) {
 console.error('Error fetching dashboard:', err);
-// setError('حدث خطأ في تحميل البيانات');
 if (err.response?.status === 403) {
     navigate('/login');
 }
@@ -472,8 +471,23 @@ return (
                         </div>
                         <div>
                         <span className="text-gray-500">المساحة:</span>
-                        <span className="mr-2 font-medium">{contract.formattedArea}</span>
+                        <span className="mr-2 font-medium">
+                            {contract.isZamamContract 
+                                ? `${contract.zamamShare} فدان` 
+                                : contract.formattedArea
+                            }
+                        </span>
                         </div>
+                        {contract.isZamamContract && contract.zamamId && (
+                            <div className="col-span-2">
+                                <span className="text-gray-500">نسبة الزمام:</span>
+                                <span className="mr-2 font-medium text-green-700">
+                                    {((contract.zamamShare / contract.zamamId.totalArea) * 100).toFixed(2)}%
+                                    {' '}من زمام {contract.zamamId.zamamNumber} 
+                                    {' '}(إجمالي {contract.zamamId.totalArea} فدان)
+                                </span>
+                            </div>
+                        )}
                     </div>
                     {contract.contractImage && (
                         <div className="mt-2">
@@ -769,9 +783,28 @@ return (
             <p className="font-medium">{selectedContract.formattedPrice}</p>
             </div>
             <div>
-            <p className="text-sm text-gray-500">المساحة</p>
-            <p className="font-medium">{selectedContract.formattedArea}</p>
+                <p className="text-sm text-gray-500">المساحة</p>
+                <p className="font-medium">
+                    {selectedContract.isZamamContract
+                        ? `${selectedContract.zamamShare} فدان`
+                        : selectedContract.formattedArea
+                    }
+                </p>
             </div>
+
+            {selectedContract.isZamamContract && selectedContract.zamamId && (
+                <div>
+                    <p className="text-sm text-gray-500">تفاصيل الزمام</p>
+                    <p className="font-medium">رقم الزمام: {selectedContract.zamamId.zamamNumber}</p>
+                    <p className="font-medium text-green-700">
+                        النسبة: {((selectedContract.zamamShare / selectedContract.zamamId.totalArea) * 100).toFixed(2)}%
+                        {' '}من إجمالي {selectedContract.zamamId.totalArea} فدان
+                    </p>
+                    <p className="text-sm text-gray-500">
+                        المتبقي: {(selectedContract.zamamId.totalArea - (selectedContract.zamamId.ownedArea / 100 * selectedContract.zamamId.totalArea)).toFixed(2)} فدان
+                    </p>
+                </div>
+            )}
         </div>
 
         <div>
