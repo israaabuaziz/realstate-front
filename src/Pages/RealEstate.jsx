@@ -263,12 +263,23 @@ return (
                     <span className="text-gray-600 w-40">السعر:</span>
                     <span className="text-gray-800 font-medium">{contract.formattedPrice}</span>
                     </div>
-
                     {contract.floor && (
                     <div className="flex">
                         <span className="text-gray-600 w-40">الطابق:</span>
                         <span className="text-gray-800 font-medium">{contract.floor}</span>
                     </div>
+                    )}
+                    {contract.zamamDetails && (
+                    <>
+                        <div className="flex">
+                        <span className="text-gray-600 w-40">رقم الزمام:</span>
+                        <span className="text-gray-800 font-medium">{contract.zamamDetails.zamamNumber}</span>
+                        </div>
+                        <div className="flex">
+                        <span className="text-gray-600 w-40">نسبة الزمام:</span>
+                        <span className="text-green-600 font-bold">{contract.zamamDetails.percentageOfZamam}</span>
+                        </div>
+                    </>
                     )}
                 </div>
 <div className="mt-4 flex gap-2 flex-wrap">
